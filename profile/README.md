@@ -8,6 +8,7 @@ This readme organizes the repositories into:
 * **Operas Service Portfolio**: services offered by Operas research infrastructure
 * **Other**
 
+To search for repositories use topic lables, e.g. "topic:diamas"
 
 **Acronyms**
 * KER: Key Exploitable Result (of the project)
