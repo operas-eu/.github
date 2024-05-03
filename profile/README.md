@@ -57,7 +57,7 @@ To search for repositories use topic lables, e.g. "topic:diamas"
 
 ## Operas Service Porfolio  
 
-### Books Metrics service 
+### Metrics  
 + [28 repositories of Hirmeos Project (not forked)](https://github.com/orgs/hirmeos/repositories?type=all)
 
 ### GoTriple
