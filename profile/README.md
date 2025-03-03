@@ -47,7 +47,7 @@ To search for repositories use topic lables, e.g. "topic:diamas"
 
 #### Other project results 
 
-+ [Reusable Curricuculum for Upskilling Trainings (as Gitbook pages)](https://craft-oa.gitbook.io/d2.2-curriculum-for-upskilling-trainings)
++ [Reusable Curriculum for Upskilling Trainings (as Gitbook pages)](https://craft-oa.gitbook.io/d2.2-curriculum-for-upskilling-trainings)
 + [IBL PAN Training materials](https://github.com/operas-eu/IBL_PAN-training-materials)
 
 ### DIAMAS 
