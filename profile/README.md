@@ -36,9 +36,9 @@ To search for repositories use topic lables, e.g. "topic:diamas"
 + [TEI to JATS Plugin](https://github.com/operas-eu/teitojats)
 + [Publication Validator Plugin](https://github.com/operas-eu/PublicationValidator)
 
-##### Visibility Pathfinder Plugin  
+##### DISCOverability Companion Plugin  
 
-+ [Visibility Pathfinder](https://github.com/operas-eu/pathfinder)
++ [DISCOverability Companion](https://github.com/operas-eu/pathfinder)
 
 ##### OJS connector for OpenAIRE Research Graph 
 
@@ -48,6 +48,11 @@ To search for repositories use topic lables, e.g. "topic:diamas"
 ##### JATS XML based interoperability between OJS and Lodel (TIB)
 
 + [Lodel Interoperability Bundle](https://github.com/operas-eu/lodel-data-interoperability-bundle)
+
+#### KER6: Knowledge base of academic publishing indexes
+
++ [Github repository/](https://github.com/operas-eu/craft-oa-ScholIndexes-doc/tree/main)
+
 
 #### Other project results 
 
