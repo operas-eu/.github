@@ -18,13 +18,6 @@ To search for repositories use topic lables, e.g. "topic:diamas"
 
 ### CRAFT-OA
 
-#### KER5 - OJS Diamond Plugins
-
-##### Plugins for OJS and Lodel Interoperability based on XML 
-+ [JATS Template Plugin](https://github.com/operas-eu/jatsTemplate)
-+ [TEI to JATS Plugin](https://github.com/operas-eu/teitojats)
-+ [Publication Validator Plugin](https://github.com/operas-eu/PublicationValidator)
-
 ##### DISCOverability Companion Plugin  
 
 + [DISCOverability Companion](https://github.com/operas-eu/pathfinder)
