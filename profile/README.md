@@ -18,17 +18,6 @@ To search for repositories use topic lables, e.g. "topic:diamas"
 
 ### CRAFT-OA
 
-#### KER1: Diamond Discovery Hub
-
-+ Hosted on University of Warsaw's Gitlab Server: https://git.icm.edu.pl/
-
-#### KER2: OJS Core Feature Enhancements
-
-+ [PKP Web Application Library](https://github.com/operas-eu/pkp-lib)
-+ [Open Journal Systems](htps://github.com/operas-eu/ojs)
-+ [Open Preprint Systems](https://github.com/operas-eu/ops)
-+ [Open Monograph Press](https://github.com/operas-eu/omp)
-
 #### KER5 - OJS Diamond Plugins
 
 ##### Plugins for OJS and Lodel Interoperability based on XML 
