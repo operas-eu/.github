@@ -18,10 +18,6 @@ To search for repositories use topic lables, e.g. "topic:diamas"
 
 ### CRAFT-OA
 
-##### DISCOverability Companion Plugin  
-
-+ [DISCOverability Companion](https://github.com/operas-eu/pathfinder)
-
 ##### OJS connector for OpenAIRE Research Graph 
 
 + [OpenAIRE Plugin for Open Journal Systems](https://github.com/operas-eu/openAIRE)
