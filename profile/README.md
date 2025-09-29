@@ -10,20 +10,16 @@ This readme organizes the repositories into:
 
 To search for repositories use topic lables, e.g. "topic:diamas"
 
-**Acronyms**
-* KER: Key Exploitable Result (of the project)
-
 
 ## Project-related
 
 ### CRAFT-OA
 
-
-##### JATS XML based interoperability between OJS and Lodel
+#### JATS XML based interoperability between OJS and Lodel
 
 + [Lodel Interoperability Bundle](https://github.com/operas-eu/lodel-data-interoperability-bundle)
 
-#### KER6: Knowledge base of academic publishing indexes
+#### Knowledge base of academic publishing indexes
 
 + [Github repository/](https://github.com/operas-eu/craft-oa-ScholIndexes-doc/tree/main)
 
