@@ -18,10 +18,6 @@ To search for repositories use topic lables, e.g. "topic:diamas"
 
 ### CRAFT-OA
 
-##### OJS connector for OpenAIRE Research Graph 
-
-+ [OpenAIRE Plugin for Open Journal Systems](https://github.com/operas-eu/openAIRE)
-+ [OpenAIRE Plugin standard 1.0](https://github.com/munipress/OpenAIREstandard/)
 
 ##### JATS XML based interoperability between OJS and Lodel
 
