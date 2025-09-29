@@ -27,7 +27,7 @@ To search for repositories use topic lables, e.g. "topic:diamas"
 + [OpenAIRE Plugin for Open Journal Systems](https://github.com/operas-eu/openAIRE)
 + [OpenAIRE Plugin standard 1.0](https://github.com/munipress/OpenAIREstandard/)
 
-##### JATS XML based interoperability between OJS and Lodel (TIB)
+##### JATS XML based interoperability between OJS and Lodel
 
 + [Lodel Interoperability Bundle](https://github.com/operas-eu/lodel-data-interoperability-bundle)
 
