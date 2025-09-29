@@ -40,6 +40,7 @@ To search for repositories use topic lables, e.g. "topic:diamas"
 
 + [Reusable Curriculum for Upskilling Trainings (as Gitbook pages)](https://craft-oa.gitbook.io/d2.2-curriculum-for-upskilling-trainings)
 + [IBL PAN Training materials](https://github.com/operas-eu/IBL_PAN-training-materials)
++ [Lodel Helloworld Bundle](https://github.com/operas-eu/lodel-helloworld-bundle)
 
 ### DIAMAS 
 
