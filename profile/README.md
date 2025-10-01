@@ -27,11 +27,11 @@ To search for repositories use topic lables, e.g. "topic:diamas"
 
 ## Operas Service Porfolio  
 
-+ [MKDOc Template from Fair-by-Design](https://github.com/operas-eu/templates/tree/main)
 + [OPERAS Metrics](https://github.com/operas-eu/metrics_portal)
 + For other OPERAS Services see [OPERAS Gitlab](https://gitlab.operas-eu.org/)
 
 ## Other  
 
++ [MKDOc Template from Fair-by-Design](https://github.com/operas-eu/templates/tree/main)
 + [TSV Converter](https://github.com/operas-eu/tsvConverter)
 + [DOCX Converter](https://github.com/operas-eu/docxConverter) 
