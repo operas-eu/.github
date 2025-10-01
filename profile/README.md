@@ -6,7 +6,7 @@ This readme organizes the repositories into:
 
 * **Project-related**: used by the projects Operas is/was involved in
 * **Operas Service Portfolio**: services offered by Operas research infrastructure
-* * **Other**: other (forked) repositories related to the scholarly commiunication
+* **Other**: other (forked) repositories related to the scholarly commiunication
 
 To search for repositories use topic lables, e.g. "topic:diamas"
 
