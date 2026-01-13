@@ -17,7 +17,7 @@ To search for repositories use topic lables, e.g. "topic:diamas"
 
 + [Lodel Interoperability Bundle](https://github.com/operas-eu/lodel-data-interoperability-bundle)
 + [Lodel Helloworld Bundle](https://github.com/operas-eu/lodel-helloworld-bundle)
-+ [Knowledge base of academic publishing indexes](https://github.com/operas-eu/craft-oa-ScholIndexes-doc/tree/main)
++ [Guide to Scholarly Indexes](https://github.com/operas-eu/GuideScholarlyIndexes)
 + [Reusable Curriculum for Upskilling Trainings (used for a Gitbook)]([https://craft-oa.gitbook.io/d2.2-curriculum-for-upskilling-trainings](https://github.com/operas-eu/craft-oa-d2.2))
 
 ### DIAMAS 
