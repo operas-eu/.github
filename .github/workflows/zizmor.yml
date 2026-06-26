@@ -49,27 +49,41 @@ permissions:
 jobs:
   zizmor:
     name: zizmor static analysis
-    # Skip on fork PRs: a pull_request from a fork gets a read-only
-    # GITHUB_TOKEN regardless of permissions:, and the SARIF upload may then
-    # fail (GitHub's code-scanning fork exception might permit it, but we skip
-    # defensively rather than rely on it). Keyed on the presence of the
-    # caller's pull_request payload, NOT github.event_name (which is ambiguous
-    # inside a workflow_call): run when there is no PR (push, dispatch, ...) or
-    # the PR is same-repo; skip fork PRs. A fork's workflow changes are scanned
-    # on push to the default branch after merge.
-    if: >-
-      github.event.pull_request == null ||
-      github.event.pull_request.head.repo.full_name == github.repository
     runs-on: ubuntu-latest
+    env:
+      # A pull_request from a fork gets a read-only GITHUB_TOKEN regardless of
+      # permissions:, so the SARIF upload to the Security tab cannot run. Rather
+      # than SKIP fork PRs — which would leave external contributors' workflow
+      # changes, the ones most worth checking, unscanned until after merge — we
+      # downgrade them to annotation mode (advanced-security: false) below.
+      # zizmor is static analysis and never executes the scanned workflows, so
+      # running it on fork content is safe. Keyed on the caller's pull_request
+      # payload, NOT github.event_name (ambiguous inside a workflow_call): a
+      # same-repo PR, a push, or a dispatch is not a fork PR.
+      IS_FORK_PR: ${{ github.event.pull_request != null && github.event.pull_request.head.repo.full_name != github.repository }}
     steps:
       - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10  # v6.0.3
         with:
           persist-credentials: false
       - uses: zizmorcore/zizmor-action@192e21d79ab29983730a13d1382995c2307fbcaa  # v0.5.7
         id: zizmor
+        # On a fork PR, force advanced-security off (no SARIF upload is possible
+        # on a read-only token) and surface findings as inline annotations
+        # instead. advanced-security is ALWAYS off on a fork PR (the expression
+        # below can't be true when IS_FORK_PR is true), so annotations can be
+        # enabled for every fork PR — including a caller that itself sets
+        # advanced-security: false — without ever colliding with the
+        # mutually-exclusive advanced-security path. continue-on-error keeps a
+        # downgraded fork PR non-blocking ONLY when the caller is report-only
+        # (advanced-security: true + enforce: false), so its findings stay
+        # advisory exactly as they would on a same-repo PR; every other case
+        # (enforce: true, or a caller that sets advanced-security: false itself)
+        # still blocks on findings via zizmor's exit code.
+        continue-on-error: ${{ env.IS_FORK_PR == 'true' && inputs.advanced-security && !inputs.enforce }}
         with:
           persona: ${{ inputs.persona }}
-          advanced-security: ${{ inputs.advanced-security }}
+          advanced-security: ${{ inputs.advanced-security && env.IS_FORK_PR != 'true' }}
+          annotations: ${{ env.IS_FORK_PR == 'true' }}
       # Report-only by default: advanced-security uploads SARIF and suppresses
       # zizmor's exit codes, so the step above always passes. Once a repo's
       # baseline is clean the caller sets enforce: true and the step below fails
@@ -79,7 +93,10 @@ jobs:
         if: ${{ inputs.enforce }}
         env:
           SARIF: ${{ steps.zizmor.outputs.output-file }}
-          ADVANCED_SECURITY: ${{ inputs.advanced-security }}
+          # Effective value: a downgraded fork PR has advanced-security off even
+          # when the caller requested it, so the "no SARIF" branch below takes
+          # the exit-code path instead of failing closed.
+          ADVANCED_SECURITY: ${{ inputs.advanced-security && env.IS_FORK_PR != 'true' }}
         run: |
           if [ -z "$SARIF" ] || [ ! -f "$SARIF" ]; then
             if [ "$ADVANCED_SECURITY" = "true" ]; then
