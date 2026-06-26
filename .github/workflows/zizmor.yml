@@ -1,0 +1,102 @@
+# Reusable zizmor static-analysis workflow for OPERAS repos.
+#
+# Scans the CALLING repo's GitHub Actions workflows with zizmor
+# (https://github.com/zizmorcore/zizmor) for supply-chain and injection
+# risks: unpinned actions, pull_request_target misuse, template injection,
+# over-broad permissions, etc. By default it reports findings to the caller's
+# Security tab (SARIF / code scanning) without failing CI, which suits the
+# initial calibration phase.
+#
+# Usage (caller adds .github/workflows/zizmor.yml in its own repo):
+#
+#   name: zizmor
+#   on:
+#     pull_request:
+#       branches: [main]
+#     push:
+#       branches: [main]
+#   permissions:
+#     contents: read
+#     security-events: write
+#   jobs:
+#     zizmor:
+#       uses: operas-eu/.github/.github/workflows/zizmor.yml@<sha>  # pin to a commit
+#
+# Private repos without GitHub Advanced Security should call with
+# `advanced-security: false`. Public repos get code scanning for free.
+name: zizmor (reusable)
+
+on:
+  workflow_call:
+    inputs:
+      persona:
+        description: "Audit persona: regular | pedantic | auditor"
+        type: string
+        default: regular
+      advanced-security:
+        description: "Upload SARIF to the Security tab (needs code scanning)"
+        type: boolean
+        default: true
+      enforce:
+        description: "Fail CI on any zizmor finding (set true once the baseline is clean)"
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+  security-events: write
+
+jobs:
+  zizmor:
+    name: zizmor static analysis
+    # Skip on fork PRs: a pull_request from a fork gets a read-only
+    # GITHUB_TOKEN regardless of permissions:, and the SARIF upload may then
+    # fail (GitHub's code-scanning fork exception might permit it, but we skip
+    # defensively rather than rely on it). Keyed on the presence of the
+    # caller's pull_request payload, NOT github.event_name (which is ambiguous
+    # inside a workflow_call): run when there is no PR (push, dispatch, ...) or
+    # the PR is same-repo; skip fork PRs. A fork's workflow changes are scanned
+    # on push to the default branch after merge.
+    if: >-
+      github.event.pull_request == null ||
+      github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10  # v6.0.3
+        with:
+          persist-credentials: false
+      - uses: zizmorcore/zizmor-action@192e21d79ab29983730a13d1382995c2307fbcaa  # v0.5.7
+        id: zizmor
+        with:
+          persona: ${{ inputs.persona }}
+          advanced-security: ${{ inputs.advanced-security }}
+      # Report-only by default: advanced-security uploads SARIF and suppresses
+      # zizmor's exit codes, so the step above always passes. Once a repo's
+      # baseline is clean the caller sets enforce: true and the step below fails
+      # CI on any finding. A justified `# zizmor: ignore[rule]` comment removes a
+      # finding from the SARIF, so it also clears this gate.
+      - name: Enforce zizmor findings
+        if: ${{ inputs.enforce }}
+        env:
+          SARIF: ${{ steps.zizmor.outputs.output-file }}
+          ADVANCED_SECURITY: ${{ inputs.advanced-security }}
+        run: |
+          if [ -z "$SARIF" ] || [ ! -f "$SARIF" ]; then
+            if [ "$ADVANCED_SECURITY" = "true" ]; then
+              echo "::error::enforce=true but no SARIF was produced — failing closed."
+              exit 1
+            fi
+            # advanced-security=false runs zizmor in annotations mode, whose own
+            # exit code already fails CI on findings; nothing to enforce here.
+            echo "::notice::advanced-security=false; zizmor's exit code gates findings."
+            exit 0
+          fi
+          if ! count="$(jq '[.runs[]?.results[]?] | length' "$SARIF")"; then
+            echo "::error::could not parse the zizmor SARIF at $SARIF; failing closed (enforce=true)."
+            exit 1
+          fi
+          echo "zizmor reported ${count} finding(s)"
+          if [ "${count}" -gt 0 ]; then
+            echo "::error::zizmor found ${count} finding(s); failing (enforce=true). Fix or ignore them."
+            exit 1
+          fi
