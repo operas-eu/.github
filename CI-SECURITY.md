@@ -106,6 +106,18 @@ Two inputs control behaviour:
 
 The recommended path for a repository is: add the caller in report mode, clear the baseline findings, then flip to blocking.
 
+### If the repository also runs MegaLinter
+
+MegaLinter (9.5.0 and later) bundles its own copy of zizmor. Left enabled, it scans the workflows a second time under a different configuration, which gives inconsistent results and a duplicate failure. Disable the bundled copy so the dedicated caller is the single source of zizmor coverage:
+
+```yaml
+# .mega-linter.yml
+DISABLE_LINTERS:
+  - ACTION_ZIZMOR
+```
+
+Also remove any `ACTION_ZIZMOR_UNSECURED_ENV_VARIABLES` entry: it exists only to let the bundled copy reach the GitHub API, and it is not needed once the bundled copy is off. MegaLinter's other security scanners (osv-scanner, grype, trivy) and actionlint keep running normally; only the redundant bundled zizmor is removed.
+
 ## What this means when you contribute
 
 - **A failing `zizmor` (or MegaLinter) check is blocking** on repositories that have enforcement on. The annotation or Security-tab entry names the rule and the line; fix it or, if it is a justified exception, add an inline `# zizmor: ignore[<rule>]` with a reason.
@@ -116,7 +128,7 @@ The recommended path for a repository is: add the caller in report mode, clear t
 
 - **`GITHUB_TOKEN` cannot modify `.github/workflows/`.** This is a GitHub restriction (only a PAT with the `workflow` scope can). Because we deliberately do not use PATs, any automation that would commit a change to a workflow file is blocked. Keep workflow files clean by hand.
 - **Pull-request checks scan only the diff; the push to `main` scans everything.** A finding in an unchanged file can therefore surface only after merge, on the full-codebase run. When hardening a repository, expect the first push to `main` to reveal pre-existing findings the PR checks did not see.
-- **MegaLinter's bundled scanners vs dedicated workflows.** Where a repository runs MegaLinter, its bundled osv-scanner and dependency scanners are used as-is. zizmor is run through the dedicated reusable workflow rather than MegaLinter's bundled copy, because the dedicated one is configured once for the whole org and is not constrained by MegaLinter's linter environment.
+- **MegaLinter's bundled scanners.** Where a repository runs MegaLinter, its bundled dependency-vulnerability scanners (osv-scanner, grype, trivy) are used as-is. zizmor is the exception: it runs through the dedicated reusable workflow, and the bundled copy is disabled (see "If the repository also runs MegaLinter" above), so the configuration lives in one place for the whole org.
 
 ## Rollout
 
