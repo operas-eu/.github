@@ -2,6 +2,8 @@
 
 How we secure GitHub Actions and GitLab CI across the EDCH and OPERAS repositories, what the automated checks enforce, and what you need to do when you write or change a workflow.
 
+Naming: the EDCH is hosted in the GitHub organisation `EUDCH`, and OPERAS in `operas-eu`. This document uses "EDCH" and "OPERAS" in prose and the exact org slugs (`EUDCH`, `operas-eu`) only in literal `uses:` references and paths.
+
 This is the canonical reference, published in `operas-eu/.github` (OPERAS, the parent organisation) and mirrored to `EUDCH/.github`. A shorter context brief for the wider OPERAS team lives in Confluence (ITSUPPORT) and links back here.
 
 ## Why
