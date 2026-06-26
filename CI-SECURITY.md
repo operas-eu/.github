@@ -4,7 +4,7 @@ How we secure GitHub Actions and GitLab CI across the EDCH and OPERAS repositori
 
 Naming: the EDCH is hosted in the GitHub organisation `EUDCH`, and OPERAS in `operas-eu`. This document uses "EDCH" and "OPERAS" in prose and the exact org slugs (`EUDCH`, `operas-eu`) only in literal `uses:` references and paths.
 
-This is the canonical reference, published in `operas-eu/.github` (OPERAS, the parent organisation) and mirrored to `EUDCH/.github`. A shorter context brief for the wider OPERAS team lives in Confluence (ITSUPPORT) and links back here.
+This is the canonical reference, published in `operas-eu/.github` (OPERAS, the parent organisation); a mirror will be added in `EUDCH/.github`. A shorter context brief for the wider OPERAS team will live in Confluence (ITSUPPORT) and link back here.
 
 ## Why
 
@@ -51,7 +51,7 @@ These apply to every GitHub Actions workflow in scope. zizmor enforces most of t
      with:
        persist-credentials: false
    ```
-   The exception is a job that commits back (for example MegaLinter auto-fix in commit mode), which needs the persisted credentials. Mark that case explicitly, with a justification on the ignore:
+   The exception is a job that commits back (for example MegaLinter auto-fix in commit mode), which needs the persisted credentials. Mark that case explicitly with `# zizmor: ignore[artipacked]` (`artipacked` is the zizmor rule that flags credential persistence) and a justification:
    ```yaml
    - uses: actions/checkout@<sha> # vX.Y.Z
      with:
