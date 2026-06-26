@@ -37,7 +37,7 @@ These apply to every GitHub Actions workflow in scope. zizmor enforces most of t
 
 1. **Pin actions by commit SHA, with an exact-version comment.**
    ```yaml
-   uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+   - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
    ```
    The SHA is what actually runs (a tag can be moved to malicious code; a SHA cannot). The `# vX.Y.Z` comment is read by Dependabot, which keeps the pin updated.
 
@@ -49,9 +49,12 @@ These apply to every GitHub Actions workflow in scope. zizmor enforces most of t
      with:
        persist-credentials: false
    ```
-   The exception is a job that commits back (for example MegaLinter auto-fix in commit mode), which needs the persisted credentials. Mark that case explicitly:
+   The exception is a job that commits back (for example MegaLinter auto-fix in commit mode), which needs the persisted credentials. Mark that case explicitly, with a justification on the ignore:
    ```yaml
-   persist-credentials: true # zizmor: ignore[artipacked]
+   - uses: actions/checkout@<sha> # vX.Y.Z
+     with:
+       # commit-mode auto-fix pushes its changes back using these credentials
+       persist-credentials: true # zizmor: ignore[artipacked]
    ```
 
 4. **Use `pull_request`, not `pull_request_target`.** `pull_request_target` runs with the base repository's token and is safe only if it never checks out the pull request's code. Plain `pull_request` gets a non-privileged token on forks and checks out the proposed change, which is what you usually want. Only reach for `pull_request_target` with a clear, commented reason.
@@ -100,12 +103,17 @@ jobs:
       advanced-security: false
 ```
 
+The reusable workflow is pinned by commit SHA. The org `.github` repository is not release-tagged, so the pin carries a `# operas-eu/.github#<n>` reference to the pull request that set it, rather than the `# vX.Y.Z` comment used for released actions.
+
 Two inputs control behaviour:
 
-- **`advanced-security`** — `true` on public repositories (and any repository with GitHub Advanced Security): findings are uploaded as SARIF to the Security tab. `false` on private repositories without Advanced Security: findings appear as inline annotations, and zizmor's exit code fails the check on any finding.
-- **`enforce`** — when set, the check fails the build on findings instead of reporting only. This is how a repository goes from "report" to "blocking". Genuine exceptions are marked inline with `# zizmor: ignore[<rule>]` and a justifying comment.
+- **`advanced-security`** — set `true` on public repositories (and any repository with GitHub Advanced Security): findings are uploaded as SARIF to the Security tab, which is report-only by default. Set `false` on private repositories without Advanced Security: findings appear as inline annotations and the check fails on any finding, because there is no Security-tab sink, so this path blocks by nature.
+- **`enforce`** — relevant on the `advanced-security: true` path, where findings are otherwise report-only. Setting `enforce: true` makes any finding fail the check, taking that repository from "report" to "blocking". Genuine exceptions are marked inline with `# zizmor: ignore[<rule>]` and a justifying comment.
 
-The recommended path for a repository is: add the caller in report mode, clear the baseline findings, then flip to blocking.
+The recommended path depends on the mode:
+
+- **Public (`advanced-security: true`):** add the caller report-only, clear the baseline findings shown in the Security tab, then set `enforce: true`.
+- **Private (`advanced-security: false`):** the check blocks on any finding from the start, so clear the baseline findings in the adopting pull request itself.
 
 ### If the repository also runs MegaLinter
 
