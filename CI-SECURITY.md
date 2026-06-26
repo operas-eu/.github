@@ -65,11 +65,12 @@ These apply to every GitHub Actions workflow in scope. zizmor enforces most of t
    run: echo "URL - $PR_URL"
    ```
 
-7. **Enable the Dependabot cooldown** so fresh releases are not applied automatically:
+7. **Enable a one-day Dependabot cooldown** so a same-day yanked or compromised release is not applied automatically:
    ```yaml
    cooldown:
-     default-days: 7
+     default-days: 1
    ```
+   One day is enough because the cooldown only governs routine version bumps: security fixes come from GitHub's advisory feed as separate Dependabot security updates and are not held by it. This matches the OPERAS Renovate release-age setting (1 day, with OSV fast-tracking security fixes past the gate).
 
 ## Adopting zizmor
 
