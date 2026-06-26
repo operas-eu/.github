@@ -63,9 +63,10 @@ These apply to every GitHub Actions workflow in scope. zizmor enforces most of t
 
 6. **Never interpolate context into a shell `run:` block.** Pass values through `env:` and reference them as shell variables, so an attacker-controlled value cannot break out into the command:
    ```yaml
-   env:
-     PR_URL: ${{ steps.cpr.outputs.pull-request-url }}
-   run: echo "URL - $PR_URL"
+   - name: Print PR URL
+     env:
+       PR_URL: ${{ steps.cpr.outputs.pull-request-url }}
+     run: echo "URL - $PR_URL"
    ```
 
 7. **Enable a Dependabot cooldown** so a yanked or compromised release is not applied automatically:
