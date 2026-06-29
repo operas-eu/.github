@@ -81,6 +81,11 @@ jobs:
         # still blocks on findings via zizmor's exit code.
         continue-on-error: ${{ env.IS_FORK_PR == 'true' && inputs.advanced-security && !inputs.enforce }}
         with:
+          # Pin the zizmor BINARY (the action default is version: latest). Left
+          # unpinned, zizmor's ruleset and online-audit set drift, so a new or
+          # strengthened audit can turn CI red across every caller with no repo
+          # change. Bump this deliberately.
+          version: "1.26.1"
           persona: ${{ inputs.persona }}
           advanced-security: ${{ inputs.advanced-security && env.IS_FORK_PR != 'true' }}
           annotations: ${{ env.IS_FORK_PR == 'true' }}
