@@ -1,0 +1,11 @@
+---
+version: 2
+updates:
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "daily"
+    # Cooldown so a yanked or compromised release is not applied automatically;
+    # zizmor's dependabot-cooldown audit requires default-days >= 7.
+    cooldown:
+      default-days: 7
